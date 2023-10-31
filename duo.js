@@ -1,3 +1,14 @@
+// ==UserScript==
+// @name         .
+// @namespace    .
+// @version      .
+// @description  .
+// @author       .
+// @match        .
+// @icon         .
+// @grant        .
+// ==/UserScript==
+
 const DEBUG = true;
 let mainInterval;
 
@@ -5,9 +16,9 @@ const dataTestComponentClassName = 'e4VJZ';
 
 const TIME_OUT = 1000;
 
-
+// Challenge types
 const CHARACTER_SELECT_TYPE = 'characterSelect';
-const CHARACTER_MATCH_TYPE = 'characterMatch'; 
+const CHARACTER_MATCH_TYPE = 'characterMatch'; // not yet
 const TRANSLATE_TYPE = 'translate';
 const LISTEN_TAP_TYPE = 'listenTap';
 const NAME_TYPE = 'name';
@@ -24,7 +35,7 @@ const SELECT_TRANSCRIPTION_TYPE = 'selectTranscription';
 const SPEAK_TYPE = 'speak';
 const SELECT_PRONUNCIATION_TYPE = 'selectPronunciation';
 
-
+// Query DOM keys
 const CHALLENGE_CHOICE_CARD = '[data-test="challenge-choice-card"]';
 const CHALLENGE_CHOICE = '[data-test="challenge-choice"]';
 const CHALLENGE_TRANSLATE_INPUT = '[data-test="challenge-translate-input"]';
@@ -72,7 +83,7 @@ function getChallengeObj(theObject) {
 }
 
 function getChallenge() {
-
+    // const dataTestComponentClassName = 'e4VJZ';
     const dataTestDOM = document.getElementsByClassName(dataTestComponentClassName)[0];
 
     if (!dataTestDOM) {
@@ -95,9 +106,9 @@ function dynamicInput(element, msg) {
     let lastValue = input.value;
     input.value = msg;
     let event = new Event('input', { bubbles: true });
-
+    // hack React15
     event.simulated = true;
-
+    // hack React16 内部定义了descriptor拦截value，此处重置状态
     let tracker = input._valueTracker;
     if (tracker) {
         tracker.setValue(lastValue);
@@ -121,14 +132,14 @@ function classify() {
         }
 
         case SELECT_TYPE:
-        case CHARACTER_SELECT_TYPE: { 
+        case CHARACTER_SELECT_TYPE: { // trắc nghiệm 1 đáp án
             const { choices, correctIndex } = challenge;
             if (DEBUG) console.log('SELECT CHARACTER_SELECT', { choices, correctIndex });
             document.querySelectorAll(CHALLENGE_CHOICE_CARD)[correctIndex].dispatchEvent(clickEvent);
             return { choices, correctIndex };
         }
 
-        case CHARACTER_MATCH_TYPE: { 
+        case CHARACTER_MATCH_TYPE: { // tập hợp các cặp thẻ
             const { pairs } = challenge;
             const tokens = document.querySelectorAll(CHALLENGE_TAP_TOKEN);
             pairs.forEach((pair) => {
@@ -167,7 +178,7 @@ function classify() {
             return { correctTokens };
         }
 
-        case NAME_TYPE: { 
+        case NAME_TYPE: { // nhập đán án
             const { correctSolutions } = challenge;
             if (DEBUG) console.log('NAME', { correctSolutions });
             let textInputElement = document.querySelectorAll(CHALLENGE_TEXT_INPUT)[0];
@@ -176,7 +187,7 @@ function classify() {
             return { correctSolutions };
         }
 
-        case COMPLETE_REVERSE_TRANSLATION_TYPE: { 
+        case COMPLETE_REVERSE_TRANSLATION_TYPE: { // điền vào từ còn thiếu
             const { displayTokens } = challenge;
             if (DEBUG) console.log('COMPLETE_REVERSE_TRANLATION', { displayTokens });
             const { text } = displayTokens.filter(token => token.isBlank)[0];
@@ -199,7 +210,7 @@ function classify() {
             return { correctTokens };
         }
 
-        case LISTEN_TYPE: {
+        case LISTEN_TYPE: { // nghe và điền vào ô input
             const { prompt } = challenge;
             if (DEBUG) console.log('LISTEN', { prompt });
             let textInputElement = document.querySelectorAll(CHALLENGE_TRANSLATE_INPUT)[0];
@@ -207,7 +218,7 @@ function classify() {
             return { prompt };
         }
 
-        case JUDGE_TYPE: { 
+        case JUDGE_TYPE: { // trắc nghiệm 1 đáp án
             const { correctIndices } = challenge;
             if (DEBUG) console.log('JUDGE', { correctIndices });
             document.querySelectorAll(CHALLENGE_JUDGE_TEXT)[correctIndices[0]].dispatchEvent(clickEvent);
@@ -215,7 +226,7 @@ function classify() {
         }
 
         case DIALOGUE_TYPE:
-        case CHARACTER_INTRO_TYPE: { 
+        case CHARACTER_INTRO_TYPE: { // trắc nghiệm 1 đáp án
             const { choices, correctIndex } = challenge;
             if (DEBUG) console.log('DIALOGUE CHARACTER_INTRO', { choices, correctIndex });
             document.querySelectorAll(CHALLENGE_JUDGE_TEXT)[correctIndex].dispatchEvent(clickEvent);
@@ -268,6 +279,6 @@ function solveChallenge() {
     console.log(`to stop run this command clearInterval(${mainInterval})`);
 }
 
-
+// solveChallenge();
 (solveChallenge)();
 1
