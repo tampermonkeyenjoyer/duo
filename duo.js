@@ -35,7 +35,7 @@ const SELECT_TRANSCRIPTION_TYPE = 'selectTranscription';
 const SPEAK_TYPE = 'speak';
 const SELECT_PRONUNCIATION_TYPE = 'selectPronunciation';
 
-// Query DOM keys
+
 const CHALLENGE_CHOICE_CARD = '[data-test="challenge-choice-card"]';
 const CHALLENGE_CHOICE = '[data-test="challenge-choice"]';
 const CHALLENGE_TRANSLATE_INPUT = '[data-test="challenge-translate-input"]';
@@ -279,6 +279,7 @@ function solveChallenge() {
     console.log(`to stop run this command clearInterval(${mainInterval})`);
 }
 
-// solveChallenge();
+
 (solveChallenge)();
 1
+//iuhrg8475hgbfdhbv3487r6fgb38refb36rfg34rgfb3
